@@ -1,5 +1,6 @@
 from models.ItemModel import ItemModel
 from flask_restful import Resource, reqparse
+from flask_jwt import jwt_required
 
 class Item(Resource):
     parser = reqparse.RequestParser()
@@ -38,12 +39,13 @@ class Item(Resource):
 
         return new_item.json(), 201
 
+    @jwt_required()
     def delete(self, id):
         item = ItemModel.find_by_id(id)
         if item:
             item.delete_from_db()
             return {'message': 'Item deleted'}
-        return {'message': "Could not delete item with id '%d'. Item does not exist" % id}
+        return {'message': "Error: Item with id '%d' does not exist" % id}
 
     def put(self, id):
         request_data = Item.parser.parse_args()

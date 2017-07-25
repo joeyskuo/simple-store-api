@@ -1,6 +1,6 @@
 from flask_restful import Resource, reqparse
 from models.StoreModel import StoreModel
-
+from flask_jwt import jwt_required
 
 class Store(Resource):
     parser = reqparse.RequestParser()
@@ -30,7 +30,7 @@ class Store(Resource):
             return {'message': 'An error occurred while creating the store'}, 500
         return store.json()
 
-
+    @jwt_required()
     def delete(self, id):
         store = StoreModel.find_by_id(id)
         if store:
