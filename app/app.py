@@ -9,7 +9,7 @@ from resources.store import Store, Stores
 
 
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///data.db'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'postgres://postgres:postgres@localhost:5432/postgres'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 
@@ -17,11 +17,6 @@ app.secret_key = 'joeyskuo'
 api = Api(app)
 
 jwt = JWT(app, authenticate, identity) # /auth endpoint
-
-@app.before_first_request
-def create_tables():
-    db.create_all()
-
 
 api.add_resource(Register, '/register')
 api.add_resource(Store, '/store/<int:id>')
