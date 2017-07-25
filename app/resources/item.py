@@ -13,6 +13,11 @@ class Item(Resource):
                         required=True,
                         help="This field cannot be left blank!"
                         )
+    parser.add_argument('store_id',
+                        type=int,
+                        required=True,
+                        help="Every item needs a store id"
+                        )
 
     def get(self, id):
         item = ItemModel.find_by_id(id)
@@ -25,7 +30,7 @@ class Item(Resource):
         if ItemModel.find_by_id(id):
             return {'message':"An item with id '%d' already exists." % id }
 
-        new_item = ItemModel(request_data['name'], request_data['price'])
+        new_item = ItemModel(request_data['name'], request_data['price'], request_data['store_id'])
         try:
             new_item.save_to_db()
         except:
@@ -45,11 +50,12 @@ class Item(Resource):
         item = ItemModel.find_by_id(id)
 
         if item is None:
-            item = ItemModel(request_data['name'], request_data['price'])
+            item = ItemModel(request_data['name'], request_data['price'], request_data['store_id'])
             item.id = id
         else:
             item.name = request_data['name']
             item.price = request_data['price']
+            item.store_id = request_data['store_id']
 
         item.save_to_db()
 
