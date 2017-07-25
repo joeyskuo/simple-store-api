@@ -8,6 +8,8 @@ from flask_jwt import JWT
 
 from security import authenticate, identity
 
+from resources.store import Store, Stores
+
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///data.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
@@ -15,6 +17,9 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 app.secret_key = 'joeyskuo'
 api = Api(app)
+
+api.add_resource(Store, '/store/<int:id>')
+api.add_resource(Stores, '/stores')
 
 
 jwt = JWT(app, authenticate, identity) # /auth endpoint
